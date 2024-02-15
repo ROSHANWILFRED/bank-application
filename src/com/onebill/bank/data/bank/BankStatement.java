@@ -5,90 +5,90 @@ import java.util.LinkedList;
 
 public class BankStatement {
 
-    private String username;
-    private String type;
-    private double amount;
-    private double userBalance;
-    private Date transactionDate;
-    private String bankName;
-    private static LinkedList<BankStatement> transactionDetails;
+	private String username;
+	private String type;
+	private double amount;
+	private double userBalance;
+	private Date transactionDate;
+	private String bankName;
+	private static LinkedList<BankStatement> transactionDetails;
 
-    public BankStatement(String username, String type, double amount, double userBalance, Date transactionDate,
-                         String bankName) {
-        this.username = username;
-        this.type = type;
-        this.amount = amount;
-        this.userBalance = userBalance;
-        this.transactionDate = transactionDate;
-        this.bankName = bankName;
-    }
-    
-    public static LinkedList<BankStatement> createSampleTransactions() {
-        LinkedList<BankStatement> transactions = new LinkedList<>();
-        
-        return transactions;
-    }
+	public BankStatement(String username, String type, double amount, double userBalance, Date transactionDate,
+			String bankName) {
+		this.username = username;
+		this.type = type;
+		this.amount = amount;
+		this.userBalance = userBalance;
+		this.transactionDate = transactionDate;
+		this.bankName = bankName;
+	}
 
-    public static void addTransactionDetails(BankStatement transaction) {
-        if (transactionDetails == null) {
-            transactionDetails = new LinkedList<>();
-        }
-        transactionDetails.add(transaction);
-    }
+	public static LinkedList<BankStatement> createSampleTransactions() {
+		LinkedList<BankStatement> transactions = new LinkedList<>();
 
-    public static LinkedList<BankStatement> getTransactionDetails() {
-        return transactionDetails;
-    }
+		return transactions;
+	}
 
-    public void setTransactionDetails(LinkedList<BankStatement> transactionDetails) {
-        BankStatement.transactionDetails = transactionDetails;
-    }
+	public static void addTransactionDetails(BankStatement transaction) {
+		if (transactionDetails == null) {
+			transactionDetails = new LinkedList<>();
+		}
+		transactionDetails.add(transaction);
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public static LinkedList<BankStatement> getTransactionDetails() {
+		return transactionDetails;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setTransactionDetails(LinkedList<BankStatement> transactionDetails) {
+		BankStatement.transactionDetails = transactionDetails;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public double getAmount() {
-        return amount;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    public double getUserBalance() {
-        return userBalance;
-    }
+	public double getAmount() {
+		return amount;
+	}
 
-    public void setUserBalance(double userBalance) {
-        this.userBalance = userBalance;
-    }
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
 
-    public Date getTransactionDate() {
-        return transactionDate;
-    }
+	public double getUserBalance() {
+		return userBalance;
+	}
 
-    public void setTransactionDate(Date transactionDate) {
-        this.transactionDate = transactionDate;
-    }
+	public void setUserBalance(double userBalance) {
+		this.userBalance = userBalance;
+	}
 
-    public String getBankName() {
-        return bankName;
-    }
+	public Date getTransactionDate() {
+		return transactionDate;
+	}
 
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
-    }
+	public void setTransactionDate(Date transactionDate) {
+		this.transactionDate = transactionDate;
+	}
+
+	public String getBankName() {
+		return bankName;
+	}
+
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
+	}
 }

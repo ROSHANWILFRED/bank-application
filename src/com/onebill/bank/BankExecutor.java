@@ -12,8 +12,6 @@ import com.onebill.bank.service.UserService;
 public class BankExecutor {
 
 	private static LinkedList<BankHelpAndSupport> complaints = BankHelpAndSupport.createSampleComplaints();
-	
-
 
 	private static void addUserComplaint(String username, String complaint) {
 		boolean isUnique = true;
@@ -68,11 +66,13 @@ public class BankExecutor {
 				loginUser(scanner, userService);
 				break;
 			case 2:
+				System.out.print("Enter your username: ");
 				String userName = scanner.nextLine();
 				helpSupport(userName);
 				break;
 			case 3:
-				System.out.println("Thank you for using our Bank. Goodbye!");
+				System.out.println();
+				System.out.println("--------------Thank you for using our Bank. Goodbye!--------------");
 				scanner.close();
 				System.exit(0);
 			default:
