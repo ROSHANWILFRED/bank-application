@@ -7,7 +7,7 @@ import com.onebill.bank.data.bank.BankStatement;
 import com.onebill.bank.data.config.ConfigData;
 import com.onebill.bank.data.user.UserData;
 
-public class BankService {
+public class BankService implements RBIBank{
 
     private UserData user;
     private String bankName;
