@@ -6,6 +6,8 @@ import java.util.Scanner;
 import com.onebill.bank.data.bank.BankHelpAndSupport;
 import com.onebill.bank.data.bank.BankStatement;
 import com.onebill.bank.data.user.UserData;
+import com.onebill.bank.exception.InvalidUserCredentialException;
+import com.onebill.bank.exception.NoUserFoundException;
 import com.onebill.bank.service.BankService;
 import com.onebill.bank.service.UserService;
 
@@ -82,40 +84,46 @@ public class BankExecutor {
 	}
 
 	private static void loginUser(Scanner scanner, UserService userService) {
-		System.out.print("Enter your username: ");
-		String enteredUsername = scanner.nextLine();
-		UserData selectedUser = UserService.returnUserData(enteredUsername);
+		try {
+            System.out.print("Enter your username: ");
+            String enteredUsername = scanner.nextLine();
+            UserData selectedUser = UserService.returnUserData(enteredUsername);
 
-		if (selectedUser == null) {
-			System.err.println("User not found.");
-			System.out.println("Try Again:");
-			loginUser(scanner, userService);
-		}
+            if (selectedUser == null) {
+                throw new NoUserFoundException("User not found.");
+            }
+            
+            System.out.print("Enter password for " + selectedUser.getName() + ": ");
+            String enteredPassword = scanner.nextLine();
 
-		System.out.print("Enter password for " + selectedUser.getName() + ": ");
-		String enteredPassword = scanner.nextLine();
+            boolean passwordCheck = userService.validatePassword(enteredUsername, enteredPassword);
+            if (!passwordCheck) {
+                throw new InvalidUserCredentialException("Password Incorrect");
+            }
 
-		boolean passwordCheck = userService.validatePassword(enteredUsername, enteredPassword);
-		if (!passwordCheck) {
-			System.err.println("Password Incorrect.");
-			System.out.println("Try Again:");
-			loginUser(scanner, userService);
-		}
+            String userType = selectedUser.getRole();
 
-		String userType = selectedUser.getRole();
-
-		switch (userType) {
-		case "user":
-			System.out.println("---------------------------LOGIN SUCCESSFUL---------------------------");
-			handleUser(scanner, userService, selectedUser);
-			break;
-		case "admin":
-			System.out.println("---------------------------LOGIN SUCCESSFUL---------------------------");
-			handleAdmin(scanner, userService);
-			break;
-		default:
-			System.err.println("Invalid user role.");
-		}
+            switch (userType) {
+                case "user":
+                    System.out.println("---------------------------LOGIN SUCCESSFUL---------------------------");
+                    handleUser(scanner, userService, selectedUser);
+                    break;
+                case "admin":
+                    System.out.println("---------------------------LOGIN SUCCESSFUL---------------------------");
+                    handleAdmin(scanner, userService);
+                    break;
+                default:
+                    System.err.println("Invalid user role.");
+            }
+        } catch (NoUserFoundException e) {
+            System.err.println(e.getMessage());
+            System.out.println("Try Again!!");
+            loginUser(scanner, userService);
+        } catch (InvalidUserCredentialException e) {
+        	System.err.println(e.getMessage());
+        	System.out.println("Try Again!!");
+        	loginUser(scanner,userService);
+        } 
 	}
 
 	private static void handleUser(Scanner scanner, UserService userService, UserData selectedUser) {
@@ -226,12 +234,17 @@ public class BankExecutor {
 			case 2:
 				System.out.print("Enter username to remove: ");
 				String removeUsername = scanner.nextLine();
-				UserData userToRemove = UserService.returnUserData(removeUsername);
-				if (userToRemove != null) {
-					userService.removeUser(userToRemove);
-					System.out.println("User removed successfully!");
-				} else {
-					System.err.println("User not found.");
+
+				try {
+				    UserData userToRemove = UserService.returnUserData(removeUsername);
+				    if (userToRemove != null) {
+				        userService.removeUser(userToRemove);
+				        System.out.println("User removed successfully!");
+				    } else {
+				        throw new NoUserFoundException("User not found.");
+				    }
+				} catch (NoUserFoundException e) {
+				    System.err.println(e.getMessage());
 				}
 				break;
 			case 3:
