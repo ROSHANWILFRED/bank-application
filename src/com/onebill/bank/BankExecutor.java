@@ -68,7 +68,8 @@ public class BankExecutor {
 				loginUser(scanner, userService);
 				break;
 			case 2:
-				helpSupport(null);
+				String userName = scanner.nextLine();
+				helpSupport(userName);
 				break;
 			case 3:
 				System.out.println("Thank you for using our Bank. Goodbye!");

@@ -31,6 +31,10 @@ public class BankService implements RBIBank{
 
     public void withdraw(double amount) {
         ConfigData configBankData = new ConfigData();
+        if (amount % 100 != 0 ) {
+        	System.err.println("Enter amount in divisions of 100");
+        	return;
+        }
         double withdrawCharge = configBankData.getWithdrawCharges() * amount;
         double totalAmountWithdrawn = amount + withdrawCharge;
         double minimumBalance = configBankData.getMinimumBalance();
