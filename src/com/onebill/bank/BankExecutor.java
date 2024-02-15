@@ -1,5 +1,6 @@
 package com.onebill.bank;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -14,32 +15,31 @@ import com.onebill.bank.service.UserService;
 public class BankExecutor {
 
 	private static LinkedList<BankHelpAndSupport> complaints = BankHelpAndSupport.createSampleComplaints();
+	private static LinkedList<BankHelpAndSupport> resolvedComplaints = BankHelpAndSupport.getResolvedComplaints();
 
-	private static void addUserComplaint(String username, String complaint) {
+	private static void addUserComplaint(String userName, String complaint) {
 		boolean isUnique = true;
-		for (BankHelpAndSupport existingComplaint : complaints) {
-			if (existingComplaint.getComplaint().equalsIgnoreCase(complaint)) {
+		for (BankHelpAndSupport existingUserComplaint : complaints) {
+			if (existingUserComplaint.getUserName().equalsIgnoreCase(userName)) {
 				isUnique = false;
 				break;
 			}
 		}
 
 		if (isUnique) {
-			BankHelpAndSupport userComplaint = new BankHelpAndSupport(complaint, username);
+			BankHelpAndSupport userComplaint = new BankHelpAndSupport(complaint, userName);
 			complaints.add(userComplaint);
 			System.out.println("Your complaint has been successfully submitted. We'll look into it shortly.");
 		} else {
-			System.out.println("Your complaint is already registered. We'll look into it shortly.");
+			System.out.println("Your complaint is already exist. We'll look into it shortly and resolve the issue.");
 		}
 	}
 
 	private static void helpSupport(String userName) {
 		System.out.println("If you're facing issues logging in, please contact our support team.");
 		System.out.println("You can reach us at support@yourbank.com or call us at 1-800-123-4567.");
-		System.out.println("Here are some existing complaints:");
-		for (BankHelpAndSupport complaint : complaints) {
-			System.out.println("- " + complaint.getComplaint());
-		}
+		System.out.println();
+		
 		System.out.print("Would you like to submit a complaint? (yes/no): ");
 		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
@@ -110,7 +110,7 @@ public class BankExecutor {
                     break;
                 case "admin":
                     System.out.println("---------------------------LOGIN SUCCESSFUL---------------------------");
-                    handleAdmin(scanner, userService);
+                    handleAdmin(scanner, userService, selectedUser);
                     break;
                 default:
                     System.err.println("Invalid user role.");
@@ -199,7 +199,7 @@ public class BankExecutor {
 		}
 	}
 
-	private static void handleAdmin(Scanner scanner, UserService userService) {
+	private static void handleAdmin(Scanner scanner, UserService userService,UserData selectedUser) {
 		System.out.println("Welcome, Admin!");
 
 		while (true) {
@@ -207,8 +207,9 @@ public class BankExecutor {
 			System.out.println("1. Add User");
 			System.out.println("2. Remove User");
 			System.out.println("3. Show All User Details");
-			System.out.println("4. View All Complaints");
-			System.out.println("5. Logout");
+			System.out.println("4. View and Solve Complaint");
+	        System.out.println("5. View Resolved Complaints");
+	        System.out.println("6. Logout");
 			System.out.print("Enter your choice: ");
 			int adminChoice = Integer.parseInt(scanner.nextLine());
 
@@ -261,20 +262,49 @@ public class BankExecutor {
 				}
 				break;
 			case 4:
-				System.out.println("\nAll Complaints:");
-				for (BankHelpAndSupport complaint : complaints) {
-					System.out.println("User: " + complaint.getUserName());
-					System.out.println("Complaint: " + complaint.getComplaint());
-					System.out.println("Status: " + complaint.getStatus());
-					System.out.println("Date: " + complaint.getDate());
-					System.out.println();
-				}
-				break;
-			case 5:
-				System.out.println("---------------------------LOGOUT SUCCESSFUL---------------------------");
-				return;
-			default:
-				System.err.println("Invalid choice. Please enter a valid option.");
+                // View and Solve Complaint
+                
+                if (!complaints.isEmpty()) {
+                    BankHelpAndSupport complaint = complaints.getFirst(); // Read the first complaint
+                    System.out.println("\nComplaint:");
+                    System.out.println("User: " + complaint.getUserName());
+                    System.out.println("Complaint: " + complaint.getComplaint());
+                    System.out.println("Date: " + complaint.getDate());
+                    System.out.print("Status: " + complaint.getStatus());
+                    System.out.println("\n1. Solve\n2. Skip");
+                    System.out.print("Enter your choice: ");
+                    int solveChoice = Integer.parseInt(scanner.nextLine());
+                    if (solveChoice == 1) {
+                        complaint.setStatus("Resolved");
+                        complaint.setAdminUserName(selectedUser.getName());
+                        complaint.setDateResolved(new Date());
+                        resolvedComplaints.add(complaint);
+                        complaints.remove(complaint);
+                        
+                        System.out.println("Complaint solved successfully!");
+                    }
+                } else {
+                    System.err.println("No complaints to solve.");
+                }
+                break;
+            case 5:
+                // View Resolved Complaints
+                LinkedList<BankHelpAndSupport> resolvedComplaints = BankHelpAndSupport.getResolvedComplaints();
+                System.out.println("\nResolved Complaints:");
+                for (BankHelpAndSupport complaint : resolvedComplaints) {
+                    System.out.println("User: " + complaint.getUserName());
+                    System.out.println("Complaint: " + complaint.getComplaint());
+                    System.out.println("Date Filed: " + complaint.getDate());
+                    System.out.println("Solved By: " + complaint.getAdminUserName());
+                    System.out.println("Date Resolved: "+complaint.getDateResolved());
+                    System.out.println();
+                }
+                break;
+            case 6:
+                System.out.println("---------------------------LOGOUT SUCCESSFUL---------------------------");
+                return;
+            default:
+                System.err.println("Invalid choice. Please enter a valid option.");
 			}
 		}
 	}

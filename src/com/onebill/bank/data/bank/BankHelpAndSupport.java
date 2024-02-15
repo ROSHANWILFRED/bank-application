@@ -10,6 +10,9 @@ public class BankHelpAndSupport {
 	private String status;
 	private String adminUserName;
 	private Date dateResolved;
+	
+	private static LinkedList<BankHelpAndSupport> resolvedComplaints = new LinkedList<>();
+
 
 	// Constructor
 	public BankHelpAndSupport(String complaint, String userName) {
@@ -77,6 +80,10 @@ public class BankHelpAndSupport {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public static LinkedList<BankHelpAndSupport> getResolvedComplaints() {
+		return resolvedComplaints;
 	}
 
 }

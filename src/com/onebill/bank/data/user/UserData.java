@@ -12,7 +12,8 @@ public class UserData {
 		users.add(new UserData("Nasim", "Nasim123", 8000, "SBI", "user"));
 		users.add(new UserData("Roshan", "roshan@17", 5000, "AXIS", "user"));
 		users.add(new UserData("Kiran", "kiran@111", 20000, "SBI", "user"));
-		users.add(new UserData("admin", "admin", 0, null, "admin"));
+		users.add(new UserData("admin1", "admin", 0, null, "admin"));
+		users.add(new UserData("admin2", "admin", 0, null, "admin"));
 	}
 
 	private String name;
